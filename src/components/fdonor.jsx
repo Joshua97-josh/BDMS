@@ -4,9 +4,10 @@ import { FaSearch } from "react-icons/fa";
 export default function FindDonors() {
   const [searchTerm, setSearchTerm] = useState("");
   const [donorList] = useState([
-    { name: "John Doe", bloodGroup: "A+", location: "Chennai" },
-    { name: "Alice Smith", bloodGroup: "B-", location: "Mumbai" },
-    { name: "Raj Kumar", bloodGroup: "O+", location: "Bangalore" },
+    { name: "Joshua W", bloodGroup: "O+", location: "Arani" },
+    { name: "Yuvaraj A", bloodGroup: "B+", location: "Thiruvannamalai" },
+    { name: "Sachin R", bloodGroup: "O+", location: "Cheyyar" },
+    { name: "Sanjay K", bloodGroup: "B+", location: "Mittapalli" },
   ]);
   const [filteredDonors, setFilteredDonors] = useState(donorList);
 

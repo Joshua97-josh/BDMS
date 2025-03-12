@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaHeartbeat, FaUserPlus, FaComments } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 export default function HomePage() {
   const [donors, setDonors] = useState(1200);
   const [requests, setRequests] = useState(450);
+  const navigate=useNavigate();
 
   useEffect(() => {
     // Simulating real-time updates (can be replaced with API calls)
@@ -23,8 +25,8 @@ export default function HomePage() {
         <h1 className="text-red-600 text-2xl font-bold">Blood Donation System</h1>
         <div className="space-x-6">
           <a href="#" className="text-red-500 hover:text-red-700">Home</a>
-          <a href="#" className="text-red-500 hover:text-red-700">Find Donors</a>
-          <a href="#" className="text-red-500 hover:text-red-700">Request Blood</a>
+          <a href="/finddonor" className="text-red-500 hover:text-red-700">Find Donors</a>
+          <a href="/request-blood" className="text-red-500 hover:text-red-700">Request Blood</a>
           <a href="#" className="text-red-500 hover:text-red-700">About Us</a>
         </div>
       </nav>
@@ -36,6 +38,7 @@ export default function HomePage() {
         <motion.button
           whileHover={{ scale: 1.1 }}
           className="bg-white text-red-600 px-6 py-3 rounded-lg text-lg font-semibold shadow-md hover:bg-gray-200 transition"
+          onClick={()=>navigate("/donate-blood")}
         >
           Donate Blood Now
         </motion.button>
