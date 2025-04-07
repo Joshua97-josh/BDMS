@@ -25,9 +25,12 @@ export default function HomePage() {
         <h1 className="text-red-600 text-2xl font-bold">Blood Donation System</h1>
         <div className="space-x-6">
           <a href="#" className="text-red-500 hover:text-red-700">Home</a>
+          <a href="/register" className="text-red-500 hover:text-red-700">Register</a>
           <a href="/finddonor" className="text-red-500 hover:text-red-700">Find Donors</a>
           <a href="/request-blood" className="text-red-500 hover:text-red-700">Request Blood</a>
-          <a href="#" className="text-red-500 hover:text-red-700">About Us</a>
+          <a href="/signup" className="text-red-500 hover:text-red-700">Sign Up</a>
+          <a href="/donor-login" className="text-red-500 hover:text-red-700">Login</a>
+          <a href="/donor-signup" className="text-red-500 hover:text-red-700">About Us</a>
         </div>
       </nav>
 
@@ -38,7 +41,7 @@ export default function HomePage() {
         <motion.button
           whileHover={{ scale: 1.1 }}
           className="bg-white text-red-600 px-6 py-3 rounded-lg text-lg font-semibold shadow-md hover:bg-gray-200 transition"
-          onClick={()=>navigate("/donate-blood")}
+          onClick={()=>navigate("/donate-blood ")}
         >
           Donate Blood Now
         </motion.button>

@@ -4,6 +4,13 @@ import { BrowserRouter, Routes, Route} from 'react-router-dom'
 import FindDonors from './components/fdonor'
 import { DonateBlood } from './components/donateblood'
 import RequestBlood from './components/reqblood'
+import Register from './components/register'
+import { SignUp } from './components/login'
+import { Login } from './components/login'
+import Sample from './components/sample'
+import Demo from './components/demo'
+import DonorSignUp from './components/trial'
+import AuthPage from './components/home'
 function App() {
   const [count, setCount] = useState(0)
 
@@ -16,6 +23,13 @@ function App() {
         <Route path="/finddonor" element={<FindDonors />} />
         <Route path="/donate-blood" element={<DonateBlood />} />
         <Route path="/request-blood" element={<RequestBlood />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/sample" element={<Sample />} />
+        <Route path="/demo" element={<Demo />} />
+        <Route path="/donor-signup" element={<DonorSignUp />} />
+        <Route path="/donor-login" element={<AuthPage />} />
         </Routes>
 
       </BrowserRouter>
@@ -24,4 +38,3 @@ function App() {
 }
 
 export default App
-
