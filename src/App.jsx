@@ -11,6 +11,7 @@ import Sample from './components/sample'
 import Demo from './components/demo'
 import DonorSignUp from './components/trial'
 import AuthPage from './components/home'
+import MHomePage from './components/hmain'
 function App() {
   const [count, setCount] = useState(0)
 
@@ -30,6 +31,7 @@ function App() {
         <Route path="/demo" element={<Demo />} />
         <Route path="/donor-signup" element={<DonorSignUp />} />
         <Route path="/donor-login" element={<AuthPage />} />
+        <Route path="/mhome" element={<MHomePage />} />
         </Routes>
 
       </BrowserRouter>

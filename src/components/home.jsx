@@ -345,19 +345,8 @@ const AuthPage = () => {
                 />
                 <label className="block mb-2">Email</label>
                 <input className="w-full p-2 border rounded mb-2" type="email" required />
-                <button type="button" onClick={generateOtp} className="w-full bg-gray-500 text-white p-2 rounded mb-2">Send OTP</button>
-              </>
-            )}
-            <label className="block mb-2">Enter OTP</label>
-            <input
-              className="w-full p-2 border rounded mb-2"
-              type="text"
-              placeholder="Enter OTP"
-              value={otpInput}
-              onChange={(e) => setOtpInput(e.target.value)}
-              required
-            />
-            {isSignup && (
+
+                {isSignup && (
               <>
                 <label className="block mb-2">Password</label>
                 <input className="w-full p-2 border rounded mb-2" type="password" required />
@@ -365,10 +354,31 @@ const AuthPage = () => {
                 <input className="w-full p-2 border rounded mb-2" type="password" required />
               </>
             )}
+                <button type="button" onClick={generateOtp} className="w-full bg-gray-500 text-white p-2 rounded mb-2">Send OTP</button>
+              </>
+            )}
+            {otp && 
+            <div><label className="block mb-2">Enter OTP</label>
+           <input
+              className="w-full p-2 border rounded mb-2"
+              type="text"
+              placeholder="Enter OTP"
+              value={otpInput}
+              onChange={(e) => setOtpInput(e.target.value)}
+              required
+            />
+           </div>
+}
+          
+          
             {!isSignup && (
               <a href="#" className="text-red-600 text-sm mb-2 block">Forgot Password?</a>
             )}
-            <button className="w-full bg-red-600 text-white p-2 rounded">{isSignup ? "Signup" : "Login"}</button>
+            {isSignup ?
+            <button className="w-full bg-red-600 text-white p-2 rounded">Signup</button>:
+            <button href="/mhome" className="w-full bg-red-600 text-white p-2 rounded">Login</button>}
+           
+
           </form>
         </motion.div>
       </div>
