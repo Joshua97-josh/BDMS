@@ -3,21 +3,40 @@ import { FaSearch } from "react-icons/fa";
 
 export default function FindDonors() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [donorList] = useState([
-    { name: "Joshua W", bloodGroup: "O+", location: "Arani" },
-    { name: "Yuvaraj A", bloodGroup: "B+", location: "Thiruvannamalai" },
-    { name: "Sachin R", bloodGroup: "O+", location: "Cheyyar" },
-    { name: "Sanjay K", bloodGroup: "B+", location: "Mittapalli" },
-  ]);
-  const [filteredDonors, setFilteredDonors] = useState(donorList);
-
+  const [filteredDonors, setFilteredDonors] = useState([]);
+  const [donorList, setDonorList] = useState([]);
+  
+  // Fetch donors from backend API
   useEffect(() => {
+    const fetchDonors = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/api/donors', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: null // if you want to fetch all donors
+        });
+      
+        const data = await response.json();
+        setDonorList(data);
+      } catch (error) {
+        console.error("Error fetching donors:", error);
+      }
+      
+    };
+
+    fetchDonors();
+  }, []);
+
+  // Search function when the button is clicked
+  const handleSearch = () => {
     setFilteredDonors(
       donorList.filter((donor) =>
         donor.bloodGroup.toLowerCase().includes(searchTerm.toLowerCase())
       )
     );
-  }, [searchTerm, donorList]);
+  };
 
   return (
     <div className="p-10 bg-gray-100 min-h-screen">
@@ -30,7 +49,10 @@ export default function FindDonors() {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <button className="ml-3 p-3 bg-red-600 text-white rounded-lg hover:bg-red-700">
+        <button
+          onClick={handleSearch}
+          className="ml-3 p-3 bg-red-600 text-white rounded-lg hover:bg-red-700"
+        >
           <FaSearch />
         </button>
       </div>

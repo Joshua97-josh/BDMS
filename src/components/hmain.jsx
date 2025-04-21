@@ -30,7 +30,7 @@ export default function MHomePage() {
           <a href="/request-blood" className="text-red-500 hover:text-red-700">Request Blood</a>
           <a href="/signup" className="text-red-500 hover:text-red-700">Sign Up</a>
           <a href="/donor-login" className="text-red-500 hover:text-red-700">Login</a>
-          <a href="/donor-signup" className="text-red-500 hover:text-red-700">About Us</a>
+          <a href="/donor-signup" className="text-red-500 hover:text-red-700">Register</a>
         </div>
       </nav>
 
