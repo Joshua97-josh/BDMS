@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios'
 import { Getlocalstorage, Getlocalstorageusername } from "../localstorage";
-import { Get_Use_one, GetTimetocken } from "../springboot_usercontion";
+import { DonorRegistration, Get_Use_one, GetTimetocken } from "../springboot_usercontion";
+import { useNavigate } from "react-router-dom";
 
 
 const DonorSignUp = () => {
+  const navigate=useNavigate();
+
   const [dob, setDob] = useState("");
   const [age, setAge] = useState("");
   const [location, setLocation] = useState("");
@@ -23,23 +26,39 @@ const DonorSignUp = () => {
     latitude: null,
     longitude: null,
   });
+
+  var username = Getlocalstorageusername();
+  var Tocken = Getlocalstorage();
+
   useEffect(() => {
     Get_use_one_name();
   }, []);
- async function Get_use_one_name() {
-     
-    var username=Getlocalstorageusername();
-    var Tocken = Getlocalstorage();
+  async function Get_use_one_name() {
+    try {
+      var response = await GetTimetocken(Tocken);
+      console.log(response.data);
     var response = await GetTimetocken(Tocken);
-   var data_get={username,Tocken};
-     var Spring_Response=await Get_Use_one(data_get);
-     setUseondata(Spring_Response.data)
+    var data_get = { username, Tocken };
+    var Spring_Response = await Get_Use_one(data_get);
+    setUseondata(Spring_Response.data)
     console.log(Spring_Response.data);
     console.log(Useondata);
-
-
-
+  } catch (error) {
+    navigate("/");
+    console.log(error.response.data);
   }
+  }
+
+  useEffect(() => {
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      name: Useondata.name,
+      phoneNumber: Useondata.phone,
+      emailId: Useondata.username,
+    }));
+  }, [Useondata]);
+
+  console.log(formData);
 
   // Fetch location on mount
   useEffect(() => {
@@ -103,10 +122,14 @@ const DonorSignUp = () => {
       dob,
       age: parseInt(age),
       location,
+      Tocken,
     };
 
     try {
       console.log(dataToSend);
+
+      var respon = await DonorRegistration(dataToSend);
+      console.log(respon.data);
       //const response = await axios.post("http://localhost:8080/api/submit", dataToSend);
 
       // In axios, a successful response (status 200–299) comes here
@@ -130,17 +153,17 @@ const DonorSignUp = () => {
       <div className="bg-white p-8 rounded-lg shadow-md max-w-3xl w-full">
         <h2 className="text-2xl font-bold text-red-600 mb-6 text-center">Donor Registration</h2>
         <form className="grid grid-cols-1 md:grid-cols-2 gap-4" onSubmit={handleSubmit}>
-          <FormField label="Name" name="name" value={Useondata.name} onChange={handleChange} required />
+          <FormField label="Name" type="text" name="name" value={Useondata.name} onChange={handleChange} required />
           <FormField label="Date of Birth" type="date" value={dob} onChange={handleDobChange} required />
           <FormField label="Age" type="number" value={age} readOnly />
           <SelectField label="Gender" name="gender" value={formData.gender} onChange={handleChange} required options={["Male", "Female", "Other"]} />
           <SelectField label="Blood Group" name="bloodGroup" value={formData.bloodGroup} onChange={handleChange} required options={["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"]} />
           <SelectField label="Unit" name="unit" value={formData.unit} onChange={handleChange} required options={["1", "2"]} />
-          <FormField label="Phone Number" name="phoneNumber" value={Useondata.phone} onChange={handleChange} required />
+          <FormField label="Phone Number" type="number" name="phoneNumber" value={Useondata.phone} onChange={handleChange} required />
           <FormField label="Email ID" type="email" name="emailId" value={Useondata.username} onChange={handleChange} />
           <SelectField label="State" name="state" value={formData.state} onChange={handleChange} required options={["Tamil Nadu", "Karnataka", "Kerala", "Andhra Pradesh"]} />
           <SelectField label="District" name="district" value={formData.district} onChange={handleChange} required options={["Chennai", "Coimbatore", "Madurai", "Tirunelveli"]} />
-          <FormField label="Pin Code" name="pinCode" value={formData.pinCode} onChange={handleChange} required />
+          <FormField label="Pin Code" name="pinCode" type="number" value={formData.pinCode} onChange={handleChange} required />
           <FormField label="Location" value={location} readOnly />
 
           <div className="col-span-2 text-center mt-4">

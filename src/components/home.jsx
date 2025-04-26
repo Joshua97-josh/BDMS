@@ -69,6 +69,10 @@ const AuthPage = () => {
       console.log(regAlldata)
       var respo = await Register(regAlldata);
       console.log(respo.data)
+      alert(respo.data);
+      setIsSignup(false);
+      setOtpSent(false);
+
       // setname("");
       // setusername("")
       // setpassword("")
@@ -84,7 +88,7 @@ const AuthPage = () => {
 
     } catch (error) {
       console.log(error.response.data);
-      //setverfidOTP(error.response.data);
+      alert(error.response.data);
     }
 
   }
@@ -172,7 +176,7 @@ const AuthPage = () => {
           transition={{ duration: 0.3 }}
           className="flex-1 flex flex-col justify-center"
         >
-          <form  className="flex flex-col justify-between h-full">
+          <div  className="flex flex-col justify-between h-full">
             <h2 className="text-xl font-bold mb-2">{isSignup ? "Signup" : "Login"}</h2>
 
             {!isSignup && (
@@ -282,7 +286,7 @@ const AuthPage = () => {
 {otpSent &&   <button onClick={handleSignup} className="w-full bg-red-600 text-white p-2 rounded">
               Signup
             </button>}
-          </form>
+          </div>
         </motion.div>
       </div>
     </div>

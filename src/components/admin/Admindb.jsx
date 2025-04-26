@@ -6,6 +6,7 @@ import { Input } from '../ui/input';
 import { Bell, CheckCircle2, XCircle } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell, Legend } from 'recharts';
 import { format } from 'date-fns';
+import { Get_adminone_DonorRegistration } from '../../springboot_usercontion';
 
 export default function AdminDashboard() {
   const [requests, setRequests] = useState([]);
@@ -23,7 +24,8 @@ export default function AdminDashboard() {
   const [donors, setDonors] = useState([]);
 
   useEffect(() => {
-    const dummyRequests = [
+    GetResponsedata();
+      const dummyRequests = [
       { id: 1, patient: 'Sachin R', bloodGroup: 'O+', units: 2, status: 'pending' },
       { id: 2, patient: 'Santhanakrishnan S', bloodGroup: 'B-', units: 1, status: 'pending' },
       { id: 3, patient: 'Sabari S', bloodGroup: 'B+', units: 3, status: 'accepted' }
@@ -34,8 +36,14 @@ export default function AdminDashboard() {
       { id: 3, name: 'Sonal P', bloodGroup: 'AB+', phone: '9081726354', city: 'Madurai' }
     ];
     setRequests(dummyRequests);
-    setDonors(dummyDonors);
+   // setDonors(dummyDonors);
   }, []);
+
+   async function GetResponsedata(){
+    var response=await Get_adminone_DonorRegistration();
+    console.log(response.data);
+    setDonors(response.data);
+  }
 
   const handleStatusUpdate = (id, status) => {
     setRequests(prev => prev.map(req => req.id === id ? { ...req, status } : req));
@@ -168,8 +176,8 @@ export default function AdminDashboard() {
                 <TableRow key={donor.id}>
                   <TableCell>{donor.name}</TableCell>
                   <TableCell>{donor.bloodGroup}</TableCell>
-                  <TableCell>{donor.phone}</TableCell>
-                  <TableCell>{donor.city}</TableCell>
+                  <TableCell>{donor.phoneNumber}</TableCell>
+                  <TableCell>{donor.district}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

@@ -13,6 +13,7 @@ import DonorSignUp from './components/trial'
 import AuthPage from './components/home'
 import MHomePage from './components/hmain'
 import AdminDashboard from './components/admin/admindb.jsx'
+import UserRequest from './components/user_request.jsx'
 function App() {
   const [count, setCount] = useState(0)
 
@@ -34,6 +35,7 @@ function App() {
         <Route path="/donor-login" element={<AuthPage />} />
         <Route path="/mhome" element={<MHomePage />} />
         <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/UserRequest/:id" element={<UserRequest />} />
         </Routes>
 
       </BrowserRouter>
