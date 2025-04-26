@@ -2,33 +2,113 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";  // Import useNavigate
+import { Loginbk, Register, Sendotp } from "../springboot";
+import { Stroageusername,StroageTockin } from "../localstorage";
 
 const AuthPage = () => {
   const [isSignup, setIsSignup] = useState(true);
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [username, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [otpInput, setOtpInput] = useState("");
+  const [otp, setOtpInput] = useState("");
   const [otpSent, setOtpSent] = useState(false);
+  const [role, setrole] = useState("USER");
+
 
   const navigate = useNavigate(); // Initialize useNavigate
 
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try{
+      const auth = { username, password }; // Encode username:password
+      var respon = await Loginbk(auth);
+      console.log(respon.data);
+      if(respon.data!==null){
+        Stroageusername(username)
+        StroageTockin(respon.data);
+        navigate("/mhome");
+      }
+      //   console.log(auth);
+    }catch(error){
+      console.log(error.response.data);
+      alert("Username Or Password Incorrect ! ....")
+    }
+  
+  }
+
   const generateOtp = async () => {
-    if (!email) {
+    if (!username) {
       alert("Please enter your email before requesting OTP.");
       return;
     }
     try {
-      const response = await axios.post("http://localhost:8080/api/send-otp", { email });
+      // const response = await axios.post("http://localhost:8080/api/send-otp", { email });
+      var Register = "Register";
+      console.log(username);
+      var response = await Sendotp(username, Register);
+
       alert(response.data);
       setOtpSent(true);
     } catch (err) {
       console.error(err);
-      alert("Failed to send OTP.");
+      console.log("Failed to send OTP.");
+      alert(err.response.data);
     }
-  };
+  }
+
+
+  async function handleSignup() {
+
+    // dispatch(setUsers(signupForm))
+
+    try {
+      var regAlldata = { name, username, password, otp, role, phone };
+
+      console.log(regAlldata)
+      var respo = await Register(regAlldata);
+      console.log(respo.data)
+      // setname("");
+      // setusername("")
+      // setpassword("")
+      // setOtp("")
+      // setTogal(false);
+      // setAlert(true);
+      // setSignup(false);
+
+
+
+
+
+
+    } catch (error) {
+      console.log(error.response.data);
+      //setverfidOTP(error.response.data);
+    }
+
+  }
+
+
+  //myspring boot
+  // async function RegOTPsent(){
+  //   try{
+  //       var Register="Register";
+  //       console.log(email);
+  //       var response=await Sendotp(email,Register);
+  //       alert(response.data);
+  //       setOtpSent(true);
+  // setTogal(respon)
+  // setverfidOTP("")
+  // setMessage("")
+
+
+  //     }catch(error){
+  //           console.log(error.response.data);
+  //           setMessage(error.response.data)
+  //           setTogal("")
+  //     }    
+  // }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -92,17 +172,17 @@ const AuthPage = () => {
           transition={{ duration: 0.3 }}
           className="flex-1 flex flex-col justify-center"
         >
-          <form onSubmit={handleSubmit} className="flex flex-col justify-between h-full">
+          <form  className="flex flex-col justify-between h-full">
             <h2 className="text-xl font-bold mb-2">{isSignup ? "Signup" : "Login"}</h2>
 
             {!isSignup && (
               <>
-                <label className="block mb-2">Email or Phone Number</label>
+                <label className="block mb-2">User Email </label>
                 <input
                   className="w-full p-2 border rounded mb-2"
                   type="text"
                   required
-                  value={email}
+                  value={username}
                   onChange={(e) => setEmail(e.target.value)}
                 />
                 <label className="block mb-2">Password</label>
@@ -113,6 +193,10 @@ const AuthPage = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
+
+                <button onClick={handleLogin} className="w-full bg-red-600 text-white p-2 rounded">
+                  Login
+                </button>
               </>
             )}
 
@@ -142,7 +226,7 @@ const AuthPage = () => {
                 <input
                   className="w-full p-2 border rounded mb-2"
                   type="email"
-                  value={email}
+                  value={username}
                   onChange={(e) => setEmail(e.target.value)}
                   required
                 />
@@ -182,7 +266,7 @@ const AuthPage = () => {
                   className="w-full p-2 border rounded mb-2"
                   type="text"
                   placeholder="Enter OTP"
-                  value={otpInput}
+                  value={otp}
                   onChange={(e) => setOtpInput(e.target.value)}
                   required
                 />
@@ -195,9 +279,9 @@ const AuthPage = () => {
               </a>
             )}
 
-            <button type="submit" className="w-full bg-red-600 text-white p-2 rounded">
-              {isSignup ? "Signup" : "Login"}
-            </button>
+{otpSent &&   <button onClick={handleSignup} className="w-full bg-red-600 text-white p-2 rounded">
+              Signup
+            </button>}
           </form>
         </motion.div>
       </div>

@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios'
+import { Getlocalstorage, Getlocalstorageusername } from "../localstorage";
+import { Get_Use_one, GetTimetocken } from "../springboot_usercontion";
 
 
 const DonorSignUp = () => {
   const [dob, setDob] = useState("");
   const [age, setAge] = useState("");
   const [location, setLocation] = useState("");
+  const [Useondata, setUseondata] = useState("");
 
   const [formData, setFormData] = useState({
     name: "",
@@ -14,11 +17,29 @@ const DonorSignUp = () => {
     emailId: "",
     bloodGroup: "",
     state: "",
+    unit: "",
     district: "",
     pinCode: "",
     latitude: null,
     longitude: null,
   });
+  useEffect(() => {
+    Get_use_one_name();
+  }, []);
+ async function Get_use_one_name() {
+     
+    var username=Getlocalstorageusername();
+    var Tocken = Getlocalstorage();
+    var response = await GetTimetocken(Tocken);
+   var data_get={username,Tocken};
+     var Spring_Response=await Get_Use_one(data_get);
+     setUseondata(Spring_Response.data)
+    console.log(Spring_Response.data);
+    console.log(Useondata);
+
+
+
+  }
 
   // Fetch location on mount
   useEffect(() => {
@@ -28,7 +49,7 @@ const DonorSignUp = () => {
 
         try {
           const response = await fetch(
-           ` https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+            ` https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
           );
           const data = await response.json();
           setLocation(data.display_name || "Location unavailable");
@@ -85,8 +106,9 @@ const DonorSignUp = () => {
     };
 
     try {
-      const response = await axios.post("http://localhost:8080/api/submit", dataToSend);
-    
+      console.log(dataToSend);
+      //const response = await axios.post("http://localhost:8080/api/submit", dataToSend);
+
       // In axios, a successful response (status 200–299) comes here
       alert("✅ Donor registered successfully!");
     } catch (error) {
@@ -100,21 +122,22 @@ const DonorSignUp = () => {
         alert("❌ Network error while submitting the form.");
       }
     }
-    
+
   };
 
   return (
     <div className="p-10 bg-gray-100 min-h-screen flex justify-center items-center">
       <div className="bg-white p-8 rounded-lg shadow-md max-w-3xl w-full">
-        <h2 className="text-2xl font-bold text-red-600 mb-6 text-center">Donor Sign-Up</h2>
+        <h2 className="text-2xl font-bold text-red-600 mb-6 text-center">Donor Registration</h2>
         <form className="grid grid-cols-1 md:grid-cols-2 gap-4" onSubmit={handleSubmit}>
-          <FormField label="Name" name="name" value={formData.name} onChange={handleChange} required />
+          <FormField label="Name" name="name" value={Useondata.name} onChange={handleChange} required />
           <FormField label="Date of Birth" type="date" value={dob} onChange={handleDobChange} required />
           <FormField label="Age" type="number" value={age} readOnly />
           <SelectField label="Gender" name="gender" value={formData.gender} onChange={handleChange} required options={["Male", "Female", "Other"]} />
           <SelectField label="Blood Group" name="bloodGroup" value={formData.bloodGroup} onChange={handleChange} required options={["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"]} />
-          <FormField label="Phone Number" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} required />
-          <FormField label="Email ID" type="email" name="emailId" value={formData.emailId} onChange={handleChange} />
+          <SelectField label="Unit" name="unit" value={formData.unit} onChange={handleChange} required options={["1", "2"]} />
+          <FormField label="Phone Number" name="phoneNumber" value={Useondata.phone} onChange={handleChange} required />
+          <FormField label="Email ID" type="email" name="emailId" value={Useondata.username} onChange={handleChange} />
           <SelectField label="State" name="state" value={formData.state} onChange={handleChange} required options={["Tamil Nadu", "Karnataka", "Kerala", "Andhra Pradesh"]} />
           <SelectField label="District" name="district" value={formData.district} onChange={handleChange} required options={["Chennai", "Coimbatore", "Madurai", "Tirunelveli"]} />
           <FormField label="Pin Code" name="pinCode" value={formData.pinCode} onChange={handleChange} required />
@@ -122,7 +145,7 @@ const DonorSignUp = () => {
 
           <div className="col-span-2 text-center mt-4">
             <button type="submit" className="px-6 py-2 bg-red-600 text-white font-semibold rounded-lg">
-              Sign Up
+              Submit
             </button>
           </div>
         </form>

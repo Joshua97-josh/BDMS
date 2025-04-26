@@ -2,11 +2,28 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaHeartbeat, FaUserPlus, FaComments } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { Getlocalstorage } from "../localstorage";
+import { GetTimetocken } from "../springboot_usercontion";
 
 export default function HomePage() {
   const [donors, setDonors] = useState(1200);
   const [requests, setRequests] = useState(450);
   const navigate=useNavigate();
+
+  useEffect(() => {
+    ChakeTocken() 
+  }, []);
+  async function ChakeTocken() {
+    try {
+      var Tocken = Getlocalstorage();
+      var response = await GetTimetocken(Tocken);
+      console.log(response.data);
+      navigate("/mhome");
+    } catch (error) {
+      
+      console.log(error.response.data);
+    }
+  }
 
   useEffect(() => {
     // Simulating real-time updates (can be replaced with API calls)
